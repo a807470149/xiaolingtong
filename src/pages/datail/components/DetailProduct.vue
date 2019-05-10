@@ -21,7 +21,7 @@
 
         <p class="step-title">选择版本</p>
         <ul class="step-list">
-          <li>
+          <li class="active">
             <span class="name">8GB+128GB</span>
             <span class="price">3299元</span>
           </li>
@@ -37,7 +37,7 @@
 
         <p class="step-title">选择颜色</p>
         <ul class="step-list">
-          <li>
+          <li class="active">
             <img src="/images/detail/lan.jpg" alt>全息幻彩蓝
           </li>
           <li>
@@ -267,6 +267,9 @@ export default {
             width: 16px;
             height: 16px;
             margin-right: 20px;
+          }
+          &.active {
+            border: 1px solid rgb(250, 81, 89);
           }
         }
       }

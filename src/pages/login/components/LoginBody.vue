@@ -5,41 +5,57 @@
         <a href="javascript:;" class="bigLink"></a>
         <div class="xlt-login-box">
           <div class="nav-tabs">
-            <a href="javascript:void(0);" class="link1">账号登录</a>
+            <a href="javascript:void(0);" :class="{active: show}" @click="show = true">账号登录</a>
             <span class="line"></span>
-            <a href="javascript:void(0);" class="link2">扫码登录</a>
+            <a href="javascript:void(0);" :class="{active: !show}" @click="show = false">新用户注册</a>
           </div>
 
-          <div class="login-area">
-            <form action="/pass/serviceLoginAuth2" method="POST">
-              <div class="login-area-box1">
-                <label for class="user">
-                  <input type="text" placeholder="邮箱/手机号码/小玲通ID">
-                </label>
-                <label for class="password">
-                  <input type="text" placeholder="密码">
-                </label>
+          <div class="login" v-if="show">
+            <div class="login-area">
+              <form action="/pass/serviceLoginAuth2" method="POST">
+                <div class="login-area-box1">
+                  <label for class="user">
+                    <input type="text" v-model="logPhone" placeholder="邮箱/手机号码/小玲通ID">
+                  </label>
+                  <label for class="password">
+                    <input type="password" v-model="logPassword" placeholder="密码">
+                  </label>
+                </div>
+              </form>
+            </div>
+            <div class="btns-bg" @click="login">登录</div>
+            <div class="other clearfix">
+              <span class="sms-link">
+                <a href="javascript:;" class="smsLink" @click="show = false">手机短信登录/注册</a>
+              </span>
+              <div class="reverse">
+                <a class="outer-link" href="javascript:;" @click="show = false">立即注册</a>
+                <span>|</span>
+                <a class="outer-link" href="JavaScript:;">忘记密码？</a>
               </div>
-            </form>
-          </div>
-
-          <div class="btns-bg">登录</div>
-          <div class="other clearfix">
-            <span class="sms-link">
-              <a href="javascript:;" class="smsLink">手机短信登录/注册</a>
-            </span>
-            <div class="reverse">
-              <a
-                class="outer-link"
-                href="https://account.xiaomi.com/pass/register?callback=https%3A%2F%2Forder.mi.com%2Flogin%2Fcallback%3Ffollowup%3Dhttps%253A%252F%252Fwww.mi.com%252F%253Fclient_id%253D180100041086%26sign%3DMzU2MGI1MjBiZWJhOTQyYTdmZmRhZDViM2NkMTFiMWQwZDAyMjE4ZQ%2C%2C&sid=mi_eshop&_bannerBiz=mistore&_qrsize=180&_locale=zh_CN"
-              >立即注册</a>
-              <span>|</span>
-              <a
-                class="outer-link"
-                href="https://account.xiaomi.com/pass/forgetPassword?callback=https%3A%2F%2Forder.mi.com%2Flogin%2Fcallback%3Ffollowup%3Dhttps%253A%252F%252Fwww.mi.com%252F%253Fclient_id%253D180100041086%26sign%3DMzU2MGI1MjBiZWJhOTQyYTdmZmRhZDViM2NkMTFiMWQwZDAyMjE4ZQ%2C%2C&sid=mi_eshop&_bannerBiz=mistore&_qrsize=180&_locale=zh_CN"
-              >忘记密码？</a>
             </div>
           </div>
+
+          <div class="register" v-else>
+            <div class="reg-area">
+              <form action>
+                <input type="text" placeholder="手机号码" v-model="regPhone" class="phone">
+                <input type="password" placeholder="密码" v-model="regPassword" class="phone">
+                <div class="code-box">
+                  <input type="text" placeholder="短信验证码" class="code">
+                  <input type="button" value="获取验证码" class="button">
+                </div>
+              </form>
+              <div class="btns-bg" @click="register">立即注册</div>
+
+              <div class="other clearfix">
+                <span class="sms-link">
+                  <a href="javascript:;" class="smsLink" @click="show = true">用户名密码登陆</a>
+                </span>
+              </div>
+            </div>
+          </div>
+
           <div class="area-footer">
             <fieldset>
               <legend>其他登录方式</legend>
@@ -74,8 +90,76 @@
 </template>
 
 <script>
+import axios from "axios";
+import { mapMutations, mapState } from "vuex";
+import { setStore } from "../../../localStorage.js";
 export default {
-  name: "LoginBody"
+  name: "LoginBody",
+  data() {
+    return {
+      show: true,
+      regPhone: "",
+      regPassword: "",
+      logPhone: "",
+      logPassword: ""
+    };
+  },
+  computed: {
+    ...mapState(["user"])
+  },
+  methods: {
+    ...mapMutations(["recordUser"]),
+    register() {
+      let params = {
+        phone: this.regPhone,
+        password: this.regPassword
+      };
+      axios
+        .post("/api/users/register", params)
+        .then(res => {
+          if (res.data.status === 0) {
+            alert(res.data.message);
+            this.recordUser({
+              user: params.phone
+            });
+            this.login();
+          } else {
+            alert("账号已存在,注册失败");
+            this.regPhone = ''
+            this.regPassword = ''
+          }
+        })
+        .catch(err => {
+          console.log(err);
+        });
+
+      this.phone = "";
+      this.password = "";
+    },
+    login() {
+      let params = {
+        phone: this.logPhone,
+        password: this.logPassword
+      };
+      axios
+        .post("/api/users/login", params)
+        .then(res => {
+          if (res.data.status === 0) {
+            this.recordUser({
+              user: params.phone
+            });
+            setStore('phone', params.phone);
+            this.$router.push({ path: "/" });
+          } else {
+            alert("账号或密码错误, 登陆失败");
+            this.logPassword = ''
+          }
+        })
+        .catch(err => {
+          console.log(err);
+        });
+    }
+  }
 };
 </script>
 
@@ -112,7 +196,14 @@ export default {
           padding: 27px 0 24px;
           text-align: center;
           font-size: 24px;
-          .link1 {
+          a {
+            color: #666666;
+            &:hover {
+              color: rgb(250, 81, 89);
+            }
+          }
+
+          .active {
             color: rgb(250, 81, 89);
           }
           .line {
@@ -121,66 +212,136 @@ export default {
             margin: 0 35px 0 42px;
             border: 1px solid #e0e0e0;
           }
-          .link2 {
-            color: #666666;
-            &:hover {
-              color: rgb(250, 81, 89);
+        }
+
+        .login {
+          .login-area {
+            .login-area-box1 {
+              input {
+                width: 306px;
+                height: 22px;
+                line-height: 22px;
+                padding: 13px 16px 13px 14px;
+                display: block;
+                border: 1px solid #ccc;
+                color: #4a4a4a;
+                margin: 10px 0 20px 35px;
+              }
+            }
+          }
+          .btns-bg {
+            width: 83%;
+            margin: 0 auto;
+            height: 50px;
+            line-height: 50px;
+            text-align: center;
+            font-size: 14px;
+            color: #fff;
+            background-color: rgb(250, 81, 89);
+            margin-top: 30px;
+            cursor: pointer;
+          }
+          .other {
+            width: 83%;
+            margin: 0 auto;
+            margin-top: 16px;
+            .sms-link {
+              float: left;
+              .smsLink {
+                color: rgb(250, 81, 89);
+              }
+            }
+            .reverse {
+              float: right;
+              .outer-link {
+                color: #999;
+                &:hover {
+                  color: rgb(250, 81, 89);
+                }
+              }
+              span {
+                color: #999;
+              }
             }
           }
         }
 
-        .login-area {
-          .login-area-box1 {
+        .register {
+          .reg-area {
             input {
-              width: 306px;
               height: 22px;
               line-height: 22px;
               padding: 13px 16px 13px 14px;
+              color: #4a4a4a;
+            }
+            input.phone {
+              width: 306px;
               display: block;
               border: 1px solid #ccc;
-              color: #4a4a4a;
               margin: 10px 0 20px 35px;
             }
-          }
-        }
-        .btns-bg {
-          width: 83%;
-          margin: 0 auto;
-          height: 50px;
-          line-height: 50px;
-          text-align: center;
-          font-size: 14px;
-          color: #fff;
-          background-color: rgb(250, 81, 89);
-          margin-top: 30px;
-        }
-        .other {
-          width: 83%;
-          margin: 0 auto;
-          margin-top: 16px;
-          .sms-link {
-            float: left;
-            .smsLink {
-              color: rgb(250, 81, 89);
-            }
-          }
-          .reverse {
-            float: right;
-            .outer-link {
-              color: #999;
-              &:hover {
-                color: rgb(250, 81, 89);
+
+            .code-box {
+              width: 336px;
+              border: 1px solid #ccc;
+              margin: 10px 0 20px 35px;
+              input.code {
+                width: 205px;
+              }
+              input.button {
+                background-color: #fff;
+                border-left: 1px solid #ccc;
+                height: 100%;
+                cursor: pointer;
               }
             }
-            span {
-              color: #999;
+
+            .btns-bg {
+              width: 83%;
+              margin: 0 auto;
+              height: 50px;
+              line-height: 50px;
+              text-align: center;
+              font-size: 14px;
+              color: #fff;
+              background-color: rgb(250, 81, 89);
+              margin-top: 30px;
+              cursor: pointer;
+            }
+
+            .other {
+              width: 83%;
+              margin: 0 auto;
+              margin-top: 16px;
+              .sms-link {
+                float: left;
+                .smsLink {
+                  color: rgb(250, 81, 89);
+                }
+              }
+              .reverse {
+                float: right;
+                .outer-link {
+                  color: #999;
+                  &:hover {
+                    color: rgb(250, 81, 89);
+                  }
+                }
+                span {
+                  color: #999;
+                }
+              }
             }
           }
         }
+
         .area-footer {
           width: 83%;
           margin: 0 auto;
-          margin-top: 100px;
+          position: absolute;
+          bottom: 20px;
+          left: 50%;
+          margin-left: -170px;
           fieldset {
             border-top: 1px solid #e0e0e0;
             padding-top: 10px;

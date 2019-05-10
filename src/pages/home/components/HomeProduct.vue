@@ -21,7 +21,10 @@
               <p>
                 <span class="flag" v-if="item.flag">{{ item.flag }}</span>
               </p>
-              <img :src="item.imgUrl" alt>
+              <router-link to="/detail" target="_blank">
+                <img :src="item.imgUrl" alt>
+              </router-link>
+              
               <p class="name">{{ item.name }}</p>
               <p class="dec">{{ item.dec }}</p>
               <div class="price">{{ item.price }}</div>

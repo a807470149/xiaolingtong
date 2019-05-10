@@ -12,8 +12,8 @@
 
       <div class="product" v-show="show3" @mouseenter="show3=true" @mouseleave="show3=false">
         <ul>
-          <li v-for="item in proList[index]" :key="item.index">
-            <img :src="item.imgUrl" alt="">
+          <li v-for="item in proList[index]" :key="item.index" @click="toDetail">
+            <img :src="item.imgUrl" alt="" >
             <span>{{ item.name }}</span>
           </li>
         </ul>
@@ -662,6 +662,9 @@ export default {
     show (item) {
       this.index = item.id;
       this.show3 = true;
+    },
+    toDetail () {
+      this.$router.push({path: "detail"})
     }
   }
 };

@@ -2,10 +2,10 @@
   <div class="tonglan">
     <div class="banxin">
       <el-row>
-        <el-col :span="19">
+        <el-col :span="18">
           <ul>
             <li>
-              <span class="txt">小米商城</span>
+              <span class="txt">小玲通商城</span>
             </li>
             <li>
               <span class="txt">MIUI</span>
@@ -23,7 +23,7 @@
               <span class="txt">有品</span>
             </li>
             <li>
-              <span class="txt">小爱开放平台</span>
+              <span class="txt">小玲开放平台</span>
             </li>
             <li>
               <span class="txt">政企服务</span>
@@ -42,16 +42,17 @@
             </li>
           </ul>
         </el-col>
-        <el-col :span="5">
+        <el-col :span="6">
           <ul>
-            <li>
-              <span class="txt" @click="toLogin">登陆</span>
-            </li>
-            <li>
-              <span class="txt">注册</span>
+            <li class="top-right">
+              <span class="txt" @click="toLogin" v-if="!user">登陆/注册</span>
+
+              <span v-else>{{ user }}
+                <span class="logout" @click="logout">退出</span>
+              </span>
             </li>
             <li class="noline">
-              <span class="txt">消息通知</span>
+              <span class="txt">我的订单</span>
             </li>
             <li class="cart" @click="toCart" @mouseenter="show3 = true" @mouseleave="show3 = false">
               <span>购物车({{ count }})</span>
@@ -101,19 +102,26 @@
 
 <script>
 import { mapState,mapMutations, mapGetters } from "vuex";
+import { getStore } from "../../localStorage.js";
 
 export default {
   name: "Header",
   data() {
     return {
       activeName: "second",
-      show3: false
+      show3: false,
+      count: 0,
+      user:''
     };
   },
   methods: {
-    ...mapMutations(["deleteCarpanelData"]),
     del (id) {
-      this.deleteCarpanelData(id)
+      // this.deleteCarpanelData(id)
+    },
+    // 退出登陆
+    logout() {
+      localStorage.removeItem("phone");
+      this.$router.push({path: "/login"});
     },
     toCart() {
       this.$router.push({path:"/cart"})
@@ -122,14 +130,18 @@ export default {
       this.$router.push({path:"/login"})
     }
   },
+  mounted() {
+    this.user = localStorage.getItem("phone");
+  },
   computed: {
-    ...mapState({
-      goodsList: "goodsList"
-    }),
-    ...mapGetters({
-      count: "totleCount",
-      price: "totlePrice"
-    })
+    // ...mapState({
+    //   // goodsList: "goodsList",
+    //   user:"user"
+    // }),
+    // ...mapGetters({
+    //   count: "totleCount",
+    //   price: "totlePrice"
+    // })
   }
 };
 </script>
@@ -161,6 +173,17 @@ export default {
           &.noline {
             .txt {
               border-right: 0;
+            }
+          }
+          &.top-right {
+            width: 122px;
+            text-align: right;
+            .logout {
+              cursor: pointer;
+              margin-left: 10px;
+              &:hover{
+                color: rgb(250, 81, 89);
+              }
             }
           }
         }

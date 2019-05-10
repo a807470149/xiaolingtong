@@ -9,7 +9,6 @@
       <div class="right">
         <span class="first">概述</span>
         <span>参数</span>
-        <span>F码通道</span>
         <span>用户评价</span>
         <button @click="toDetail">立即购买</button>
       </div>
@@ -72,6 +71,7 @@ export default {
         }
         &.first {
           border-left: 0;
+          color: rgb(250, 81, 89);
         }
       }
       button {

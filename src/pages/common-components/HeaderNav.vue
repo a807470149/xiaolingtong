@@ -51,7 +51,10 @@
 </template>
 
 <script>
+import axios from "axios";
+
 export default {
+  
   name: "HeaderBav",
   data() {
     return {
@@ -60,35 +63,35 @@ export default {
       navList: [
         {
           id: 0,
-          name: "小米手机"
+          name: "小米"
         },
         {
           id: 1,
-          name: "红米"
+          name: "华为"
         },
         {
           id: 2,
-          name: "电视"
+          name: "OPPO"
         },
         {
           id: 3,
-          name: "笔记本"
+          name: "vivo"
         },
         {
           id: 4,
-          name: "家电"
+          name: "苹果"
         },
         {
           id: 5,
-          name: "新品"
+          name: "三星"
         },
         {
           id: 6,
-          name: "路由器"
+          name: "魅族"
         },
         {
           id: 7,
-          name: "智能硬件"
+          name: "金立"
         }
       ],
       proList: [
@@ -133,270 +136,271 @@ export default {
         [
           {
             flag: "新品",
-            imgUrl: "/images/home/redmi.jpg",
-            name: "Redmi Note 7 Pro",
-            price: "1599元"
+            imgUrl: "/images/home/huaweiP30.png",
+            name: "华为P30",
+            price: "3988元"
           },
           {
             flag: "新品",
-            imgUrl: "/images/home/redmi.jpg",
-            name: "Redmi Note 7 Pro",
-            price: "1599元"
+            imgUrl: "/images/home/huaweiP30.png",
+            name: "华为P30",
+            price: "3988元"
           },
           {
             flag: "新品",
-            imgUrl: "/images/home/redmi.jpg",
-            name: "Redmi Note 7 Pro",
-            price: "1599元"
+            imgUrl: "/images/home/huaweiP30.png",
+            name: "华为P30",
+            price: "3988元"
           },
           {
             flag: "",
-            imgUrl: "/images/home/redmi.jpg",
-            name: "Redmi Note 7 Pro",
-            price: "1599元"
+            imgUrl: "/images/home/huaweiP30.png",
+            name: "华为P30",
+            price: "3988元"
           },
           {
             flag: "",
-            imgUrl: "/images/home/redmi.jpg",
-            name: "Redmi Note 7 Pro",
-            price: "1599元"
+            imgUrl: "/images/home/huaweiP30.png",
+            name: "华为P30",
+            price: "3988元"
           },
           {
             flag: "",
-            imgUrl: "/images/home/redmi.jpg",
-            name: "Redmi Note 7 Pro",
-            price: "1599元"
+            imgUrl: "/images/home/huaweiP30.png",
+            name: "华为P30",
+            price: "3988元"
           }
         ],
         [
           {
             flag: "新品",
-            imgUrl: "/images/home/bihuadianshi.png",
-            name: "小米壁画电视 65英寸",
-            price: "6999元"
+            imgUrl: "/images/home/oppoReno.png",
+            name: "oppo Reno",
+            price: "3999元"
           },
           {
             flag: "新品",
-            imgUrl: "/images/home/bihuadianshi.png",
-            name: "小米壁画电视 65英寸",
-            price: "6999元"
+            imgUrl: "/images/home/oppoReno.png",
+            name: "oppo Reno",
+            price: "3999元"
           },
           {
             flag: "热卖",
-            imgUrl: "/images/home/bihuadianshi.png",
-            name: "小米壁画电视 65英寸",
-            price: "6999元"
+            imgUrl: "/images/home/oppoReno.png",
+            name: "oppo Reno",
+            price: "3999元"
           },
           {
             flag: "热卖",
-            imgUrl: "/images/home/bihuadianshi.png",
-            name: "小米壁画电视 65英寸",
-            price: "6999元"
+            imgUrl: "/images/home/oppoReno.png",
+            name: "oppo Reno",
+            price: "3999元"
           },
           {
             flag: "热卖",
-            imgUrl: "/images/home/bihuadianshi.png",
-            name: "小米壁画电视 65英寸",
+            imgUrl: "/images/home/oppoReno.png",
+            name: "oppo Reno",
+            price: "3999元"
+          },
+          {
+            flag: "",
+            imgUrl: "/images/home/oppoReno.png",
+            name: "oppo Reno",
+            price: "3999元"
+          }
+        ],
+        [
+          {
+            flag: "新品",
+            imgUrl: "/images/home/vivo S1 Pro.png",
+            name: "vivo S1 Pro",
+            price: "2698元"
+          },
+          {
+            flag: "新品",
+            imgUrl: "/images/home/vivo S1 Pro.png",
+            name: "vivo S1 Pro",
+            price: "2698元"
+          },
+          {
+            flag: "新品",
+            imgUrl: "/images/home/vivo S1 Pro.png",
+            name: "vivo S1 Pro",
+            price: "2698元"
+          },
+          {
+            flag: "新品",
+            imgUrl: "/images/home/vivo S1 Pro.png",
+            name: "vivo S1 Pro",
+            price: "2698元"
+          },
+          {
+            flag: "",
+            imgUrl: "/images/home/vivo S1 Pro.png",
+            name: "vivo S1 Pro",
+            price: "2698元"
+          },
+          {
+            flag: "",
+            imgUrl: "/images/home/vivo S1 Pro.png",
+            name: "vivo S1 Pro",
+            price: "2698元"
+          }
+        ],
+        [
+          {
+            flag: "",
+            imgUrl: "/images/home/iphone-xs.jpg",
+            name: "iphone-xs",
+            price: "7599元"
+          },
+          {
+            flag: "",
+            imgUrl: "/images/home/iphone-xs.jpg",
+            name: "iphone-xs",
+            price: "7599元"
+          },
+          {
+            flag: "",
+            imgUrl: "/images/home/iphone-xs.jpg",
+            name: "iphone-xs",
+            price: "7599元"
+          },
+          {
+            flag: "",
+            imgUrl: "/images/home/iphone-xs.jpg",
+            name: "iphone-xs",
+            price: "7599元"
+          },
+          {
+            flag: "",
+            imgUrl: "/images/home/iphone-xs.jpg",
+            name: "iphone-xs",
+            price: "7599元"
+          },
+          {
+            flag: "",
+            imgUrl: "/images/home/iphone-xs.jpg",
+            name: "iphone-xs",
+            price: "7599元"
+          }
+        ],
+        [
+          {
+            flag: "新品",
+            imgUrl: "/images/home/Galaxy S10+.jpg",
+            name: "Galaxy S10+",
             price: "6999元"
           },
           {
-            flag: "",
-            imgUrl: "/images/home/bihuadianshi.png",
-            name: "小米壁画电视 65英寸",
+            flag: "新品",
+            imgUrl: "/images/home/Galaxy S10+.jpg",
+            name: "Galaxy S10+",
+            price: "6999元"
+          },
+          {
+            flag: "新品",
+            imgUrl: "/images/home/Galaxy S10+.jpg",
+            name: "Galaxy S10+",
+            price: "6999元"
+          },
+          {
+            flag: "新品",
+            imgUrl: "/images/home/Galaxy S10+.jpg",
+            name: "Galaxy S10+",
+            price: "6999元"
+          },
+          {
+            flag: "新品",
+            imgUrl: "/images/home/Galaxy S10+.jpg",
+            name: "Galaxy S10+",
+            price: "6999元"
+          },
+          {
+            flag: "新品",
+            imgUrl: "/images/home/Galaxy S10+.jpg",
+            name: "Galaxy S10+",
             price: "6999元"
           }
         ],
         [
           {
             flag: "新品",
-            imgUrl: "/images/home/12.5yinsetoubu.png",
-            name: "小米笔记本 Air 12.5",
-            price: "3599元"
-          },
-          {
-            flag: "新品",
-            imgUrl: "/images/home/12.5yinsetoubu.png",
-            name: "小米笔记本 Air 12.5",
-            price: "3599元"
-          },
-          {
-            flag: "新品",
-            imgUrl: "/images/home/12.5yinsetoubu.png",
-            name: "小米笔记本 Air 12.5",
-            price: "3599元"
-          },
-          {
-            flag: "新品",
-            imgUrl: "/images/home/12.5yinsetoubu.png",
-            name: "小米笔记本 Air 12.5",
-            price: "3599元"
-          },
-          {
-            flag: "",
-            imgUrl: "/images/home/12.5yinsetoubu.png",
-            name: "小米笔记本 Air 12.5",
-            price: "3599元"
-          },
-          {
-            flag: "",
-            imgUrl: "/images/home/12.5yinsetoubu.png",
-            name: "小米笔记本 Air 12.5",
-            price: "3599元"
-          }
-        ],
-        [
-          {
-            flag: "",
-            imgUrl: "/images/home/320_220.jpg",
-            name: "米家互联网洗烘一体机",
-            price: "1999元"
-          },
-          {
-            flag: "",
-            imgUrl: "/images/home/320_220.jpg",
-            name: "米家互联网洗烘一体机",
-            price: "1999元"
-          },
-          {
-            flag: "",
-            imgUrl: "/images/home/320_220.jpg",
-            name: "米家互联网洗烘一体机",
-            price: "1999元"
-          },
-          {
-            flag: "",
-            imgUrl: "/images/home/320_220.jpg",
-            name: "米家互联网洗烘一体机",
-            price: "1999元"
-          },
-          {
-            flag: "",
-            imgUrl: "/images/home/320_220.jpg",
-            name: "米家互联网洗烘一体机",
-            price: "1999元"
-          },
-          {
-            flag: "",
-            imgUrl: "/images/home/320_220.jpg",
-            name: "米家互联网洗烘一体机",
-            price: "1999元"
-          }
-        ],
-        [
-          {
-            flag: "新品",
-            imgUrl: "/images/home/redmi.jpg",
-            name: "Redmi Note 7 Pro",
-            price: "1599元"
-          },
-          {
-            flag: "新品",
-            imgUrl: "/images/home/redmi.jpg",
-            name: "Redmi Note 7 Pro",
-            price: "1599元"
-          },
-          {
-            flag: "新品",
-            imgUrl: "/images/home/redmi.jpg",
-            name: "Redmi Note 7 Pro",
-            price: "1599元"
-          },
-          {
-            flag: "新品",
-            imgUrl: "/images/home/redmi.jpg",
-            name: "Redmi Note 7 Pro",
-            price: "1599元"
-          },
-          {
-            flag: "新品",
-            imgUrl: "/images/home/redmi.jpg",
-            name: "Redmi Note 7 Pro",
-            price: "1599元"
-          },
-          {
-            flag: "新品",
-            imgUrl: "/images/home/redmi.jpg",
-            name: "Redmi Note 7 Pro",
-            price: "1599元"
-          }
-        ],
-        [
-          {
-            flag: "新品",
-            imgUrl: "/images/home/luyoumesh.jpg",
-            name: "小米路由器 Mesh",
+            imgUrl: "/images/home/meizu 16s.jpg",
+            name: "魅族 16s",
             price: "9999元"
           },
           {
             flag: "双频双核",
-            imgUrl: "/images/home/luyoumesh.jpg",
-            name: "小米路由器 Mesh",
+            imgUrl: "/images/home/meizu 16s.jpg",
+            name: "魅族 16s",
             price: "9999元"
           },
           {
             flag: "",
-            imgUrl: "/images/home/luyoumesh.jpg",
-            name: "小米路由器 Mesh",
+            imgUrl: "/images/home/meizu 16s.jpg",
+            name: "魅族 16s",
             price: "9999元"
           },
           {
             flag: "",
-            imgUrl: "/images/home/luyoumesh.jpg",
-            name: "小米路由器 Mesh",
+            imgUrl: "/images/home/meizu 16s.jpg",
+            name: "魅族 16s",
             price: "9999元"
           },
           {
             flag: "大容量",
-            imgUrl: "/images/home/luyoumesh.jpg",
-            name: "小米路由器 Mesh",
+            imgUrl: "/images/home/meizu 16s.jpg",
+            name: "魅族 16s",
             price: "9999元"
           },
           {
             flag: "新品",
-            imgUrl: "/images/home/luyoumesh.jpg",
-            name: "小米路由器 Mesh",
+            imgUrl: "/images/home/meizu 16s.jpg",
+            name: "魅族 16s",
             price: "9999元"
           }
         ],
         [
           {
             flag: "",
-            imgUrl: "/images/home/yuntai.jpg",
-            name: "小米米家智能摄像机云台版",
-            price: "199元"
+            imgUrl: "/images/home/gionee m7.jpg",
+            name: "金立m7",
+            price: "2699元"
           },
           {
             flag: "",
-            imgUrl: "/images/home/yuntai.jpg",
-            name: "小米米家智能摄像机云台版",
-            price: "199元"
+            imgUrl: "/images/home/gionee m7.jpg",
+            name: "金立m7",
+            price: "2699元"
           },
           {
             flag: "",
-            imgUrl: "/images/home/yuntai.jpg",
-            name: "小米米家智能摄像机云台版",
-            price: "199元"
+            imgUrl: "/images/home/gionee m7.jpg",
+            name: "金立m7",
+            price: "2699元"
           },
           {
             flag: "",
-            imgUrl: "/images/home/yuntai.jpg",
-            name: "小米米家智能摄像机云台版",
-            price: "199元"
+            imgUrl: "/images/home/gionee m7.jpg",
+            name: "金立m7",
+            price: "2699元"
           },
           {
             flag: "",
-            imgUrl: "/images/home/yuntai.jpg",
-            name: "小米米家智能摄像机云台版",
-            price: "199元"
+            imgUrl: "/images/home/gionee m7.jpg",
+            name: "金立m7",
+            price: "2699元"
           },
           {
             flag: "",
-            imgUrl: "/images/home/yuntai.jpg",
-            name: "小米米家智能摄像机云台版",
-            price: "199元"
+            imgUrl: "/images/home/gionee m7.jpg",
+            name: "金立m7",
+            price: "2699元"
           }
         ]
-      ]
+      ],
+      goods: []
     };
   },
   methods: {
@@ -409,9 +413,17 @@ export default {
     },
     toParameter() {
       this.$router.push({path:"/overview"})
-    }
-  }
-};
+    },
+    // getData() {
+    //   axios.get('/api').then(res => {
+    //     this.goods = res.data;
+    //   })
+    // }
+  },
+  // mounted() {
+  //   this.getData();
+  // }
+}
 </script>
 
 <style lang="less" scoped>

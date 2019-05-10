@@ -7,19 +7,31 @@
         <span>温馨提示：产品是否购买成功，以最终下单为准哦，请尽快结算</span>
       </div>
       <div class="topbar-info">
-        <span class="login">登陆</span>
-        <span>注册</span>
+        <span class="login" @click="toLogin" v-if="!user">登陆 / 注册</span>
+        <span v-else>欢迎,{{ user }}</span>
       </div>
     </div>
   </div>
 </template>
 
 <script>
+import { getStore } from "../../../localStorage.js";
 export default {
   name: "CartHeader",
+  data() {
+    return {
+      user:''
+    }
+  },
+   mounted() {
+    this.user = localStorage.getItem("phone");
+  },
   methods: {
     toHome() {
       this.$router.push({path: "/"})
+    },
+    toLogin() {
+      this.$router.push({path: "/login"})
     }
   }
 }
@@ -57,13 +69,10 @@ export default {
     }
     .topbar-info {
       float: right;
-      span {
+      span.login {
         color: #999;
         padding: 0 10px;
         cursor: pointer;
-      }
-      span.login {
-        border-right: 1px solid #ccc;
       }
     }
   }

@@ -1,12 +1,12 @@
 <template>
   <div class="tonglan">
     <div class="banxin">
-      <div class="cart-empty" v-if="!count">
+      <div class="cart-empty" v-if="!goodsList.length">
         <div class="info">
           <p class="tit">您的购物车还是空的!</p>
           <p class="login-desc">登陆之后将显示您之前加入的商品</p>
-          <button class="login" @click="toLogin">立即登陆</button>
-          <button class="shopping" @click="toSearch">马上去购物</button>
+          <button class="login" @click="toLogin" v-if="!user">立即登陆</button>
+          <button class="shopping" @click="toHome">马上去购物</button>
         </div>
       </div>
 
@@ -37,15 +37,15 @@
               <el-checkbox :label="item" class="col col-check">&nbsp;</el-checkbox>
 
               <div class="col col-img">
-                <img :src="item.imgUrl" alt>
+                <img :src="item.banner" alt>
               </div>
-              <div class="col col-name">{{ item.name }}</div>
+              <div class="col col-name">{{ item.product_name }}</div>
               <div class="col col-price">{{ item.price }}</div>
               <div class="col col-num">
-                <el-input-number v-model="item.count" :min="1" label="描述文字"></el-input-number>
+                <el-input-number v-model="item.number" :min="1" label="描述文字"></el-input-number>
               </div>
-              <div class="col col-total">{{ parseFloat(item.price) * item.count }}元</div>
-              <div class="col col-action" @click="del(item.id)">X</div>
+              <div class="col col-total">{{ parseFloat(item.price) * item.number }}元</div>
+              <div class="col col-action" @click="del(item.product_id)">X</div>
             </div>
           </el-checkbox-group>
         </div>
@@ -72,6 +72,8 @@
 
 <script>
 import { mapState, mapGetters, mapMutations } from "vuex";
+import axios from "axios";
+import { getStore } from "../../../localStorage.js";
 
 export default {
   name: "CartMain",
@@ -81,52 +83,60 @@ export default {
       checkedCities: [],
       isIndeterminate: false,
       selItem: 0,
-      selPrice: 0
+      selPrice: 0,
+      goodsList: [],
+      count: 0,
+      user:''
     };
   },
   methods: {
-    ...mapMutations(["deleteCarpanelData"]),
     // 删除商品的方法
-    del(id) {
-      this.deleteCarpanelData(id);
-      this.checkedCities.forEach((goods, index) => {
-        if (id === goods.id) {
-          this.checkedCities.splice(index, 1);
-          return;
+    del(id) {},
+
+    // 向后台请求购物车数据
+    getShopCar() {
+      let params = {
+        user: this.user
+      };
+      axios.post("/api/users/getShopCar", params).then(res => {
+        if (res.data.status === 0) {
+          this.goodsList = res.data.message;
         }
       });
     },
 
+
+    toLogin() {
+      this.$router.push({ path: "/login" });
+    },
+    toHome() {
+      this.$router.push({ path: "/" });
+    },
     // 全选或者取消全选
     handleCheckAllChange(val) {
       this.checkedCities = val ? this.goodsList : [];
       this.isIndeterminate = false;
     },
-
     // 部分选择
     handleCheckedCitiesChange(value) {
       let checkedCount = value.length;
       this.checkAll = checkedCount === this.goodsList.length;
       this.isIndeterminate =
         checkedCount > 0 && checkedCount < this.goodsList.length;
-    },
-
-    toLogin() {
-      this.$router.push({ path: "/login" });
-    },
-    toSearch() {
-      this.$router.push({ path: "/search" });
     }
   },
-  computed: {
-    ...mapState({
-      goodsList: "goodsList"
-    }),
-    ...mapGetters({
-      count: "totleCount",
-      price: "totlePrice"
-    })
+  mounted() {
+    this.user = localStorage.getItem("phone");
+    this.getShopCar();
   },
+
+  // computed: {
+  //   ...mapState({
+  //     // goodsList: "goodsList",
+  //     user: "user"
+  //   }),
+  // },
+
   watch: {
     // checkedCities(val) {
     //   this.selItem = 0;
@@ -135,14 +145,23 @@ export default {
     //     this.selItem += item.count;
     //     this.selPrice += item.count * parseFloat(item.price);
     //   });
-    // }
+    // },
     checkedCities: {
       handler(val, oldval) {
         this.selItem = 0;
         this.selPrice = 0;
         val.forEach(item => {
-        this.selItem += item.count;
-        this.selPrice += item.count * parseFloat(item.price);
+          this.selItem += item.number;
+          this.selPrice += item.number * parseFloat(item.price);
+        });
+      },
+      deep: true
+    },
+    goodsList: {
+      handler(val, oldval) {
+        this.count = 0;
+        val.forEach(item => {
+          this.count += item.number;
         });
       },
       deep: true

@@ -5,7 +5,7 @@
         <li class="box" @mouseenter="item.show = true" @mouseleave="item.show = false" v-for="item in goodsList" :key="item.id">
           <div class="btn" v-show="item.show">
             <img src="/images/search/like.png" class="like" alt>
-            <img src="/images/search/cart.png" class="cart" alt @click="handleaddCarNum(item)">
+            <img src="/images/search/cart.png" class="cart" alt @click="addCart(item)">
           </div>
           <img :src="item.imgUrl" class="pro" alt>
           <p class="name">{{ item.name }}</p>
@@ -19,11 +19,15 @@
 
 <script>
 import { mapState,mapMutations } from "vuex";
+import axios from 'axios'
+import { getStore } from "../../../localStorage.js";
 
 export default {
   name: "SearchList",
   data() {
     return {
+      num: 1,
+      user: "",
       goodsList: [
         {
           id: "001",
@@ -57,15 +61,26 @@ export default {
     };
   },
   methods: {
-    ...mapMutations(["addCarpanelData"]),
-    handleaddCarNum (data) {
-      this.addCarpanelData(data)
-    }
+    // ...mapMutations(["refresh"]),
+    addCart(data) {
+      let params = {
+        goods: {
+          userid: this.user,
+          product_id: data.id,
+          product_name: data.name,
+          number: this.num,
+          price: data.price,
+          banner: data.imgUrl
+        }
+      };
+      axios.post("/api/users/addCar", params).then(res => {});
+    },
   },
   computed: {
-    ...mapState({
-      // goodsList: "goodsList"
-    })
+    ...mapState(["goods"])
+  },
+  mounted() {
+    this.user = localStorage.getItem("phone");
   }
 };
 </script>

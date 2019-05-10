@@ -7,9 +7,8 @@
         <span class="pro">小米9 透明尊享版</span>
       </div>
       <div class="right">
-        <span class="first">概述</span>
+        <span class="first" @click="toOverview">概述</span>
         <span>参数</span>
-        <span>F码通道</span>
         <span>用户评价</span>
       </div>
     </div>
@@ -18,7 +17,12 @@
 
 <script>
 export default {
-  name: "DetailTop"
+  name: "DetailTop",
+  methods: {
+    toOverview () {
+      this.$router.push({path:"/overview"})
+    }
+  }
 };
 </script>
 
